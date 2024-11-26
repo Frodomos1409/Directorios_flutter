@@ -1,0 +1,33 @@
+name: directorios_fpsc
+description: "A new Flutter project."
+
+# Publicación (none indica que no será publicado)
+publish_to: 'none'
+
+# Versión del proyecto
+version: 1.0.0+1
+
+# Entorno compatible
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+# Dependencias del proyecto
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.0.0 # Añadido para manejar solicitudes HTTP
+  cupertino_icons: ^1.0.8
+
+# Dependencias para desarrollo y pruebas
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0 # Actualizado a una versión adecuada
+
+# Configuración de Flutter
+flutter:
+  uses-material-design: true
+
+  # Declaración de recursos (como imágenes)
+  assets:
+    - assets/profile_placeholder.png
