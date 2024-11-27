@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = 'http://10.26.5.70:5000/api'; // Dirección IP del servidor.
+  final String baseUrl = 'http://localhost:5000/api'; // Dirección IP del servidor.
 
   // **Registrar usuario**
   Future<Map<String, dynamic>> createUser(Map<String, dynamic> userData) async {
@@ -16,6 +16,7 @@ class ApiService {
         return json.decode(response.body); // Usuario creado
       } else {
         throw Exception('Error al registrar usuario: ${_handleError(response)}');
+      
       }
     } catch (error) {
       throw Exception('Error de conexión al registrar usuario: $error');
@@ -26,7 +27,7 @@ class ApiService {
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/login'),
+        Uri.parse('$baseUrl/users/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email, 'password': password}),
       );
@@ -79,6 +80,7 @@ class ApiService {
     }
   }
 
+  
   // **Obtener todos los usuarios**
   Future<List<Map<String, dynamic>>> getUsers() async {
     try {
