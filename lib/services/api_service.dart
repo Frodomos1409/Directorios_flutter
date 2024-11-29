@@ -2,63 +2,37 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = 'http://localhost:5000/api'; // Dirección IP del servidor.
+  static final ApiService _instance = ApiService._internal();
+  factory ApiService() => _instance;
+  ApiService._internal();
+
+  final String baseUrl = 'http://localhost:5000/api'; // Cambia según el entorno
+  String? _authToken; // Token para autenticación (si es necesario)
+
+  void setAuthToken(String token) {
+    _authToken = token;
+  }
+
+  Map<String, String> _defaultHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      if (_authToken != null) 'Authorization': 'Bearer $_authToken',
+    };
+  }
 
   // **Registrar usuario**
   Future<Map<String, dynamic>> createUser(Map<String, dynamic> userData) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/users'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(userData),
-      );
-      if (response.statusCode == 201) {
-        return json.decode(response.body); // Usuario creado
-      } else {
-        throw Exception('Error al registrar usuario: ${_handleError(response)}');
-      
-      }
-    } catch (error) {
-      throw Exception('Error de conexión al registrar usuario: $error');
-    }
+    return _post('/users', userData);
   }
 
   // **Login de usuario**
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/users/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'email': email, 'password': password}),
-      );
-      if (response.statusCode == 200) {
-        return json.decode(response.body); // Devuelve datos del usuario o token
-      } else if (response.statusCode == 401) {
-        throw Exception('Credenciales incorrectas');
-      } else {
-        throw Exception('Error al iniciar sesión: ${_handleError(response)}');
-      }
-    } catch (error) {
-      throw Exception('Error de conexión al iniciar sesión: $error');
-    }
+    return _post('/users/login', {'email': email, 'password': password});
   }
 
   // **Editar usuario**
   Future<Map<String, dynamic>> editUser(String id, Map<String, dynamic> userData) async {
-    try {
-      final response = await http.put(
-        Uri.parse('$baseUrl/users/$id'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(userData),
-      );
-      if (response.statusCode == 200) {
-        return json.decode(response.body); // Usuario actualizado
-      } else {
-        throw Exception('Error al editar usuario: ${_handleError(response)}');
-      }
-    } catch (error) {
-      throw Exception('Error de conexión al editar usuario: $error');
-    }
+    return _put('/users/$id', userData);
   }
 
   // **Eliminar usuario**
@@ -66,12 +40,10 @@ class ApiService {
     try {
       final response = await http.delete(
         Uri.parse('$baseUrl/users/$id'),
-        headers: {'Content-Type': 'application/json'},
+        headers: _defaultHeaders(),
       );
       if (response.statusCode == 200) {
-        return true; // Usuario eliminado
-      } else if (response.statusCode == 404) {
-        throw Exception('Usuario no encontrado');
+        return true;
       } else {
         throw Exception('Error al eliminar usuario: ${_handleError(response)}');
       }
@@ -80,25 +52,60 @@ class ApiService {
     }
   }
 
-  
   // **Obtener todos los usuarios**
   Future<List<Map<String, dynamic>>> getUsers() async {
+    final response = await _get('/users');
+    return List<Map<String, dynamic>>.from(response);
+  }
+
+  // **Métodos auxiliares para solicitudes**
+  Future<Map<String, dynamic>> _post(String path, Map<String, dynamic> body) async {
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/users'),
-        headers: {'Content-Type': 'application/json'},
+      final response = await http.post(
+        Uri.parse('$baseUrl$path'),
+        headers: _defaultHeaders(),
+        body: json.encode(body),
       );
-      if (response.statusCode == 200) {
-        return List<Map<String, dynamic>>.from(json.decode(response.body));
-      } else {
-        throw Exception('Error al obtener usuarios: ${_handleError(response)}');
-      }
+      return _handleResponse(response);
     } catch (error) {
-      throw Exception('Error de conexión al obtener usuarios: $error');
+      throw Exception('Error de conexión: $error');
     }
   }
 
-  // **Manejador de errores HTTP**
+  Future<Map<String, dynamic>> _put(String path, Map<String, dynamic> body) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl$path'),
+        headers: _defaultHeaders(),
+        body: json.encode(body),
+      );
+      return _handleResponse(response);
+    } catch (error) {
+      throw Exception('Error de conexión: $error');
+    }
+  }
+
+  Future<dynamic> _get(String path) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl$path'),
+        headers: _defaultHeaders(),
+      );
+      return _handleResponse(response);
+    } catch (error) {
+      throw Exception('Error de conexión: $error');
+    }
+  }
+
+  // **Manejador de respuestas**
+  Map<String, dynamic> _handleResponse(http.Response response) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return json.decode(response.body);
+    } else {
+      throw Exception(_handleError(response));
+    }
+  }
+
   String _handleError(http.Response response) {
     try {
       final errorBody = json.decode(response.body);
