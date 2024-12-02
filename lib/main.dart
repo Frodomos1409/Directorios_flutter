@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/welcome_screen.dart'; // Asegúrate de la ruta correcta
+import 'screens/welcome_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/register_screen.dart'; // Asegúrate de las rutas correctas
 
 void main() {
   runApp(MyApp());
@@ -13,8 +15,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WelcomeScreen(),
-      debugShowCheckedModeBanner: false, // Establece WelcomeScreen como la pantalla inicial
+      initialRoute: '/welcome', // Define la ruta inicial
+      routes: {
+        '/welcome': (context) => WelcomeScreen(),
+        '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
