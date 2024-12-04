@@ -49,6 +49,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Editar Perfil'),
+        backgroundColor: Colors.teal, // Color personalizado para el AppBar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,34 +57,87 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             TextField(
               controller: nombreController,
-              decoration: const InputDecoration(labelText: 'Nombre'),
+              decoration: InputDecoration(
+                labelText: 'Nombre',
+                labelStyle: const TextStyle(color: Colors.teal),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal, width: 2.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: telefonoController,
-              decoration: const InputDecoration(labelText: 'Teléfono'),
+              decoration: InputDecoration(
+                labelText: 'Teléfono',
+                labelStyle: const TextStyle(color: Colors.teal),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal, width: 2.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: institucionController,
-              decoration: const InputDecoration(labelText: 'Institución'),
+              decoration: InputDecoration(
+                labelText: 'Institución',
+                labelStyle: const TextStyle(color: Colors.teal),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal, width: 2.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: residenciaController,
-              decoration: const InputDecoration(labelText: 'Residencia'),
+              decoration: InputDecoration(
+                labelText: 'Residencia',
+                labelStyle: const TextStyle(color: Colors.teal),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal, width: 2.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context, {
+                final updatedData = {
                   'nombre': nombreController.text,
                   'telefono': telefonoController.text,
                   'institucion': institucionController.text,
-                  'residencia': residenciaController.text,
-                });
+                  'residencia': residenciaController.text, // Añadido residencia
+                };
+                Navigator.pop(context, updatedData);
               },
-              child: const Text('Guardar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal, // Color del botón
+                padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // Bordes redondeados
+                ),
+                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              child: const Text('Guardar Cambios'),
             ),
           ],
         ),

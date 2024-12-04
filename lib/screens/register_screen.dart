@@ -32,15 +32,16 @@ class RegisterScreen extends StatelessWidget {
 
     try {
       final userData = {
-        'nombre': nombre,
+        'name': nombre,           // Corregido 'nombre' a 'name'
         'email': email,
         'password': password,
-        'institution': institution,
+        'institutionName': institution,  // Asegúrate de que sea 'institutionName' como en el backend
         'phone': phone,
         'residence': residence,
       };
 
       final response = await apiService.createUser(userData);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Usuario registrado: ${response['message']}')),
       );
@@ -57,54 +58,135 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFC6DABF), // Fondo verde claro
       appBar: AppBar(
         title: const Text('Registro'),
+        backgroundColor: Color(0xFF114B5F), // Color oscuro para la barra
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: nombreController,
-              decoration: const InputDecoration(labelText: 'Nombre'),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400), // Limitar el ancho
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Campo de nombre
+                TextField(
+                  controller: nombreController,
+                  decoration: InputDecoration(
+                    labelText: 'Nombre',
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Color(0xFF114B5F)), // Color de la etiqueta
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Color(0xFF114B5F)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                // Campo de correo electrónico
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Correo Electrónico',
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Color(0xFF114B5F)), // Color de la etiqueta
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Color(0xFF114B5F)),
+                    ),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16),
+                
+                // Campo de contraseña
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Contraseña',
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Color(0xFF114B5F)), // Color de la etiqueta
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Color(0xFF114B5F)),
+                    ),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 16),
+                
+                // Campo de institución
+                TextField(
+                  controller: institutionController,
+                  decoration: InputDecoration(
+                    labelText: 'Institución',
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Color(0xFF114B5F)), // Color de la etiqueta
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Color(0xFF114B5F)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                // Campo de teléfono
+                TextField(
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                    labelText: 'Teléfono',
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Color(0xFF114B5F)), // Color de la etiqueta
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Color(0xFF114B5F)),
+                    ),
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 16),
+                
+                // Campo de residencia
+                TextField(
+                  controller: residenceController,
+                  decoration: InputDecoration(
+                    labelText: 'Residencia',
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Color(0xFF114B5F)), // Color de la etiqueta
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Color(0xFF114B5F)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                // Botón de registro
+                ElevatedButton(
+                  onPressed: () => _register(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF1A936F), // Verde intermedio
+                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // Bordes redondeados
+                    ),
+                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  child: const Text('Registrarse'),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Correo Electrónico'),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Contraseña'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: institutionController,
-              decoration: const InputDecoration(labelText: 'Institución'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: phoneController,
-              decoration: const InputDecoration(labelText: 'Teléfono'),
-              keyboardType: TextInputType.phone,
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: residenceController,
-              decoration: const InputDecoration(labelText: 'Residencia'),
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => _register(context),
-                child: const Text('Registrarse'),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

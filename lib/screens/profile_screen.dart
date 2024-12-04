@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'EditProfileScreen.dart';
+import 'package:directorios_fpsc/screens/EditProfileScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String userId;
@@ -41,8 +41,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFC6DABF), // Fondo verde claro
       appBar: AppBar(
         title: const Text('Perfil'),
+        backgroundColor: Color(0xFF114B5F), // Barra de app en color oscuro
       ),
       body: Center(
         child: Column(
@@ -55,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
             Text(
               nombre,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF114B5F)), // Color del texto
             ),
             const SizedBox(height: 10),
             Text(
@@ -97,6 +99,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   });
                 }
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF1A936F), // Color del botón
+                padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // Bordes redondeados
+                ),
+                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               child: const Text('Editar Perfil'),
             ),
           ],

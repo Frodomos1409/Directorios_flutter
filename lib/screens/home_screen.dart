@@ -8,8 +8,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFC6DABF), // Fondo verde claro
       appBar: AppBar(
         title: const Text('Inicio'),
+        backgroundColor: Color(0xFF114B5F), // Barra de app en color oscuro
         actions: [
           IconButton(
             icon: const CircleAvatar(
@@ -20,11 +22,11 @@ class HomeScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ProfileScreen(
-                    userId: userData['_id'],
-                    nombre: userData['nombre'], 
-                    telefono: userData['phone'],
-                    institucion: userData['institution'],
-                    residencia: userData['residence'],
+                    userId: userData['_id'], // Asegúrate de que este campo exista
+                    nombre: userData['name'], // Usa 'name' aquí
+                    telefono: userData['phone'] ?? '', // Asegúrate de que 'phone' esté disponible
+                    institucion: userData['institution'] ?? 'Desconocido', // Si la institución no está, usa un valor predeterminado
+                    residencia: userData['residence'] ?? 'Desconocido', // Si la residencia no está, usa un valor predeterminado
                   ),
                 ),
               );
@@ -33,7 +35,14 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Text('Bienvenido, ${userData['nombre']}'), // Cambiado a 'nombre'
+        child: Text(
+          'Bienvenido, ${userData['name'] ?? 'Usuario'}', // Usa 'name' en lugar de 'nombre'
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF114B5F), // Color del texto
+          ),
+        ),
       ),
     );
   }
