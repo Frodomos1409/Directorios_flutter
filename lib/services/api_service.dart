@@ -20,6 +20,16 @@ class ApiService {
     };
   }
 
+  // **Registrar federación**
+  Future<Map<String, dynamic>> createFederation(Map<String, dynamic> federationData) async {
+    return _post('/federations', federationData);  // Se asume que la ruta es '/federations'
+  }
+
+  // **Registrar institución**
+  Future<Map<String, dynamic>> createInstitution(Map<String, dynamic> institutionData) async {
+    return _post('/institutions', institutionData);  // Se asume que la ruta es '/institutions'
+  }
+
   // **Registrar usuario**
   Future<Map<String, dynamic>> createUser(Map<String, dynamic> userData) async {
     return _post('/users', userData);
@@ -55,7 +65,12 @@ class ApiService {
   // **Obtener todos los usuarios**
   Future<List<Map<String, dynamic>>> getUsers() async {
     final response = await _get('/users');
-    return List<Map<String, dynamic>>.from(response);
+    
+    if (response is List) {
+      return List<Map<String, dynamic>>.from(response);
+    } else {
+      throw Exception('La respuesta no es una lista de usuarios');
+    }
   }
 
   // **Métodos auxiliares para solicitudes**
@@ -98,9 +113,16 @@ class ApiService {
   }
 
   // **Manejador de respuestas**
-  Map<String, dynamic> _handleResponse(http.Response response) {
+  dynamic _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return json.decode(response.body);
+      final body = json.decode(response.body);
+      
+      // Si la respuesta es una lista, la retornamos directamente
+      if (body is List) {
+        return body;
+      } else {
+        return body;  // Si no es lista, se devuelve el cuerpo como mapa
+      }
     } else {
       throw Exception(_handleError(response));
     }
